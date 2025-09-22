@@ -1,0 +1,19 @@
+.map-page-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 30px;
+  min-height: 400px;
+}
+
+.leaflet-container {
+  height: 400px;
+  width: 100%;
+}
+
+.map-title {
+  font-size: 2.5rem;
+  color: #264653;
+  margin-bottom: 1.5rem;
+}

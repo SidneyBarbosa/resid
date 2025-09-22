@@ -1,0 +1,18 @@
+.app-layout {
+  display: flex;
+}
+
+.main-content-wrapper {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+  margin-left: 0;
+  margin-top: 80px;
+}
+
+.main-content-wrapper.shifted {
+  margin-left: 250px;
+}
+
+.main-content {
+  padding: 20px;
+}

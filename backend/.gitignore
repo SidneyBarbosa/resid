@@ -1,0 +1,8 @@
+# Exclui a pasta de dependências do Node.js
+node_modules/
+
+# Exclui o cache do NPM
+.npm/
+
+# Exclui arquivos de logs
+npm-debug.log
