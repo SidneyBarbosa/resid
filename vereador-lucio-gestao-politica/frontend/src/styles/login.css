@@ -1,0 +1,126 @@
+/* frontend/src/styles/login.css - VERSÃO CORRIGIDA */
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  /* A cor de fundo que estava no 'body' foi movida para cá */
+  background-color: #edf2f4; 
+}
+
+.login-container .login-box {
+  width: 380px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.login-container .header-login {
+  background-color: #0C4A6E;
+  color: white;
+  text-align: center;
+  padding: 18px 12px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.login-container .header-login h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.login-container .header-login p {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+
+.login-container .content {
+  padding: 28px;
+  text-align: left;
+}
+
+.login-container .content h2 {
+  text-align: center;
+  margin: 0 0 22px;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+/* Regras agora são específicas para o .login-container */
+.login-container label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+
+.login-container .checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.login-container .checkbox input {
+  margin-right: 6px;
+}
+
+.login-container .remember-label {
+  font-weight: normal;
+  font-size: 14px;
+  color: #333;
+}
+
+/* O CULPADO PRINCIPAL, AGORA CORRIGIDO */
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(to bottom, #0C4A6E, #083c58);
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background: linear-gradient(to bottom, #0e5685, #0a425f);
+}
+
+.login-container .footer {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  margin-top: 22px;
+}
+
+.login-container .message {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.login-container .message.error {
+  color: #d9534f;
+}
+
+.login-container .message.success {
+  color: #5cb85c;
+}

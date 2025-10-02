@@ -1,0 +1,72 @@
+.map-view-switcher {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.map-view-switcher .switcher-button {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+
+  margin-left: -1px;
+}
+
+.map-view-switcher .switcher-button:first-child {
+  margin-left: 0;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.map-view-switcher .switcher-button:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.map-view-switcher .switcher-button:hover {
+  background-color: #e9ecef;
+}
+
+.map-view-switcher .switcher-button.active {
+  background-color: #185aea;
+  color: #ffffff;
+  border-color: #185aea;
+  z-index: 2;
+}
+
+.map-view-switcher .switcher-button.heatmap-btn.active {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  color: #ffffff;
+}
+
+.map-cluster-marker {
+  background-color: rgba(0, 157, 255, 0.8);
+  border: 2px solid white;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.map-cluster-marker span {
+  font-size: 1.1rem;
+}
+
+.leaflet-popup-content ul {
+  padding-left: 20px;
+  margin-top: 5px;
+}

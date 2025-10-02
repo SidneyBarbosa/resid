@@ -1,0 +1,93 @@
+/* frontend/src/styles/NovoContatoForm.css - VERSÃO COMPACTA */
+
+.form-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.form-container h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    /* MUDANÇA: Agora temos 3 colunas */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 1rem; /* MUDANÇA: Espaçamento entre campos reduzido */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Classe para campos que ocupam a largura total */
+.form-group.span-3 {
+    grid-column: 1 / -1; /* Ocupa as 3 colunas */
+}
+
+.form-group label {
+    margin-bottom: 0.4rem; /* MUDANÇA: Espaçamento sobre o campo reduzido */
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem; /* MUDANÇA: Altura dos campos reduzida */
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 1px solid #dfe6e9;
+    box-sizing: border-box;
+}
+
+.form-group small {
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 1.5rem; /* MUDANÇA: Espaçamento superior reduzido */
+}
+
+/* Estilos dos botões (sem alteração) */
+.form-actions button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.submit-button {
+    background-color: #0d47a1;
+    color: white;
+}
+
+.secondary-button {
+    background-color: #f0f2f5;
+    color: #333;
+    border: 1px solid #dfe6e9;
+}
+
+.secondary-button:disabled {
+    background-color: #f8f9fa;
+    color: #bdc3c7;
+    cursor: not-allowed;
+}
