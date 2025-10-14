@@ -1,7 +1,7 @@
 // frontend/src/components/ContatoMap.js
 import React, { useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3'; // <-- Import da biblioteca correta
+import HeatmapLayer from './HeatmapLayer';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';

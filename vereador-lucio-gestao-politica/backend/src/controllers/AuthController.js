@@ -1,41 +1,48 @@
+// backend/src/controllers/authController.js
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const db = require('../database/db');
 
 exports.login = async (req, res) => {
+   
     const { email, senha } = req.body;
 
-    // A consulta SQL para a verificação do email e senha
-    const query = `
-        SELECT * FROM "Profiles"
-        WHERE
-            email = $1
-            AND
-            password_hash = crypt($2, password_hash);
-    `;
+    if (!email || !senha) {
+        return res.status(400).json({ message: "E-mail e senha são obrigatórios." });
+    }
 
     try {
-        //DOIS parâmetros para a consulta: [email, senha]
-        const result = await db.query(query, [email, senha]);
+        const result = await db.query('SELECT * FROM "Profiles" WHERE email = $1', [email]);
 
-        // Se a consulta retornar uma linha (ou mais), o login foi bem-sucedido
-        if (result.rows.length > 0) {
-            const user = result.rows[0]; // O usuário autenticado
-            
-            // Adicionar logicas para gerar um token JWT
-            
-            return res.status(200).json({ message: 'Login bem-sucedido!', user });
-        } else {
-            // Se a consulta não retornar nada, é porque o email ou a senha estavam errados
-            return res.status(401).json({ message: 'Credenciais inválidas. Verifique seu e-mail e senha.' });
+        if (result.rows.length === 0) {
+            console.log("TESTE: E-mail não encontrado no banco.");
+            return res.status(401).json({ message: 'Credenciais inválidas.' });
         }
+
+        const user = result.rows[0];
+        const passwordHashFromDB = user.password.trim();
+        const validPassword = await bcrypt.compare(senha, passwordHashFromDB);
+
+        if (!validPassword) {
+            console.log("TESTE: A comparação de senha com bcrypt deu FALSE.");
+            return res.status(401).json({ message: 'Credenciais inválidas.' });
+        }
+        
+        console.log("TESTE: A comparação de senha deu TRUE. Gerando token...");
+        const token = jwt.sign(
+            { id: user.id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '8h' }
+        );
+
+        return res.status(200).json({
+            message: 'Login bem-sucedido!',
+            token: token,
+            user: { id: user.id, first_name: user.first_name, role: user.role }
+        });
 
     } catch (err) {
-        // Verifica se o erro é de "relação não existe" (tabela não encontrada)
-        if (err.code === '42P01') {
-             console.error('Erro no login: A tabela "Profiles" não foi encontrada. Verifique o nome da tabela.', err.message);
-             return res.status(500).json({ message: 'Erro de configuração no servidor.' });
-        }
-
         console.error('Erro no login:', err.message);
-        res.status(500).json({ message: 'Erro no servidor. Tente novamente mais tarde.' });
+        res.status(500).json({ message: 'Erro no servidor.' });
     }
 };

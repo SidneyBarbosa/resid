@@ -70,3 +70,48 @@
   padding-left: 20px;
   margin-top: 5px;
 }
+
+/* frontend/src/styles/Cadastro.css */
+
+/* --- ADICIONE ESTE CÓDIGO NO FINAL DO ARQUIVO --- */
+
+/* Estilo base para ambos os botões (Editar e Deletar) */
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 8px; /* Adiciona um espaço à esquerda de cada botão */
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+}
+
+.action-btn:active {
+  transform: scale(0.98); /* Efeito de clique */
+}
+
+/* Estilo específico para o botão de EDITAR (azul) */
+.edit-btn {
+  background-color: #007bff; /* Um azul padrão e agradável */
+  border: 1px solid #006fe6;
+}
+
+.edit-btn:hover {
+  background-color: #0069d9;
+}
+
+/* Estilo específico para o botão de DELETAR (vermelho) */
+.delete-btn {
+  background-color: #dc3545; /* Um vermelho padrão para perigo/exclusão */
+  border: 1px solid #d32535;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}

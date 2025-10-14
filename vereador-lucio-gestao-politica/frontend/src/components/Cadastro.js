@@ -1,11 +1,10 @@
-// frontend/src/components/Cadastro.js
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import ContatoMap from './ContatoMap';
-import ContatoForm from './ContatoForm'; // Este é o Modal para EDITAR
-import NovoContatoForm from './NovoContatoForm'; // Este é o Formulário fixo para CRIAR
+import ContatoForm from './ContatoForm';
+import NovoContatoForm from './NovoContatoForm';
 import '../styles/Cadastro.css';
-import '../styles/NovoContatoForm.css'; // Importe o novo CSS
+import '../styles/NovoContatoForm.css';
 
 const Cadastro = () => {
     const [contatos, setContatos] = useState([]);
@@ -39,12 +38,11 @@ const Cadastro = () => {
             if (contatoToEdit) { // Editando um contato existente
                 await api.put(`/contatos/${contatoToEdit.id}`, contatoData);
             } else { // Criando um novo contato
-                // ATENÇÃO: O profile_id deve vir do usuário logado.
                 await api.post('/contatos', { ...contatoData, profile_id: 'b9988984-6aab-44b6-9d81-f86d95a4ceb3' });
             }
-            fetchContatos(); // Recarrega a lista de contatos
-            setIsEditFormOpen(false); // Fecha o formulário de edição
-            setContatoToEdit(null); // Limpa o estado de edição
+            fetchContatos();
+            setIsEditFormOpen(false);
+            setContatoToEdit(null);
         } catch (err) {
             alert('Falha ao salvar o contato. Verifique o console para mais detalhes.');
             console.error(err);
@@ -60,7 +58,7 @@ const Cadastro = () => {
         if (window.confirm('Tem certeza que deseja deletar este contato?')) {
             try {
                 await api.delete(`/contatos/${id}`);
-                fetchContatos(); // Recarrega a lista após deletar
+                fetchContatos();
             } catch (err) {
                 alert('Falha ao deletar o contato.');
                 console.error(err);
