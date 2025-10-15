@@ -9,6 +9,9 @@ import MapPage from './components/MapPage';
 import Login from './components/Login';
 import Eleicoes from './components/Eleicoes';
 import Cadastro from './components/Cadastro';
+import Financeiro from './components/Financeiro';
+import Configuracoes from './components/Configuracoes';
+import PrivateRoute from './components/PrivateRoute';
 import './styles/Global.css';
 import './styles/App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -65,8 +68,10 @@ function App() {
             <Route path="/acoes" element={<Actions />} />
             <Route path="/gestao-de-tarefas" element={<TaskManagement />} />
             <Route path="/mapa" element={<MapPage />} />
+            <Route path="/financeiro" element={<PrivateRoute><Financeiro /></PrivateRoute>} />
             <Route path="/eleicoes" element={<Eleicoes />} />
-             <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/configuracoes" element={<Configuracoes />} />
           </Route>
         </Route>
       </Routes>

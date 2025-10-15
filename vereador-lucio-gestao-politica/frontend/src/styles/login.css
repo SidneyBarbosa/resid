@@ -1,5 +1,3 @@
-/* frontend/src/styles/login.css - VERSÃO CORRIGIDA */
-
 .login-container {
   display: flex;
   justify-content: center;
@@ -7,7 +5,6 @@
   height: 100vh;
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  /* A cor de fundo que estava no 'body' foi movida para cá */
   background-color: #edf2f4; 
 }
 
@@ -52,7 +49,6 @@
   font-weight: bold;
 }
 
-/* Regras agora são específicas para o .login-container */
 .login-container label {
   display: block;
   font-size: 14px;
@@ -87,7 +83,6 @@
   color: #333;
 }
 
-/* O CULPADO PRINCIPAL, AGORA CORRIGIDO */
 .login-container button {
   width: 100%;
   padding: 10px;

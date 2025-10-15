@@ -1,3 +1,5 @@
+// frontend/src/components/Dashboard.js
+
 import React, { useState, useEffect } from 'react';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import {
@@ -12,7 +14,7 @@ import {
   LineElement
 } from 'chart.js';
 import '../styles/Dashboard.css';
-import MapPage from './MapPage';
+import ContatoMap from './ContatoMap'; // <-- MUDANÇA: Importa o mapa reutilizável
 import api from '../services/api';
 
 // Registrar os componentes do ChartJS
@@ -26,75 +28,83 @@ const formatMonth = (monthStr) => {
 };
 
 function Dashboard() {
-  // Estado para armazenar todos os dados brutos do dashboard
+  // --- ESTADOS DO COMPONENTE ---
   const [dashboardData, setDashboardData] = useState(null);
+  const [contatos, setContatos] = useState([]); // <-- NOVO ESTADO: Para guardar os contatos do mapa
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Estados para os dados já formatados dos gráficos
+  // Estados para os dados dos gráficos
   const [tasksStatusChart, setTasksStatusChart] = useState({ datasets: [] });
   const [responsibleChart, setResponsibleChart] = useState({ datasets: [] });
-  const [progressChart, setProgressChart] = useState({ datasets: [] }); // <-- NOVO ESTADO
+  const [progressChart, setProgressChart] = useState({ datasets: [] });
   const [sexChart, setSexChart] = useState({ datasets: [] });
   const [ageChart, setAgeChart] = useState({ datasets: [] });
 
+  // --- LÓGICA DE BUSCA DE DADOS ---
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/dashboard/stats');
-        const data = response.data;
-        setDashboardData(data);
+        // MUDANÇA: Busca os dados dos gráficos e dos contatos em paralelo para mais performance
+        const [statsResponse, contatosResponse] = await Promise.all([
+          api.get('/dashboard/stats'),
+          api.get('/contatos')
+        ]);
+        
+        const statsData = statsResponse.data;
+        const contatosData = contatosResponse.data;
 
-        // --- Transformação dos dados para os gráficos ---
+        setDashboardData(statsData);
+        setContatos(contatosData); // <-- SALVA OS DADOS DOS CONTATOS NO NOVO ESTADO
 
-        if (data.tasksByStatus) {
+        // --- Transformação dos dados para os gráficos (lógica original mantida) ---
+        if (statsData.tasksByStatus) {
           setTasksStatusChart({
-            labels: data.tasksByStatus.map(item => item.status),
+            labels: statsData.tasksByStatus.map(item => item.status),
             datasets: [{
-              data: data.tasksByStatus.map(item => item.count),
+              data: statsData.tasksByStatus.map(item => item.count),
               backgroundColor: ['#C9552C', '#2F7F83', '#246E9E']
             }]
           });
         }
         
-        if (data.tasksByResponsible) {
+        if (statsData.tasksByResponsible) {
           setResponsibleChart({
-            labels: data.tasksByResponsible.map(item => item.responsible),
+            labels: statsData.tasksByResponsible.map(item => item.responsible),
             datasets: [{
               label: 'Tarefas Atribuídas',
-              data: data.tasksByResponsible.map(item => item.count),
+              data: statsData.tasksByResponsible.map(item => item.count),
               backgroundColor: '#4148CF'
             }]
           });
         }
 
-        // GRÁFICO DE PROGRESSO DE TAREFAS
-        if (data.tasksProgress) {
+        if (statsData.tasksProgress) {
             setProgressChart({
-                labels: data.tasksProgress.map(item => formatMonth(item.month)),
+                labels: statsData.tasksProgress.map(item => formatMonth(item.month)),
                 datasets: [
-                    { label: 'Tarefas Concluídas', data: data.tasksProgress.map(item => item.tarefas_concluidas), backgroundColor: '#2a9d8f' },
-                    { label: 'Novas Tarefas', data: data.tasksProgress.map(item => item.novas_tarefas), backgroundColor: '#ff5722' }
+                    { label: 'Tarefas Concluídas', data: statsData.tasksProgress.map(item => item.tarefas_concluidas), backgroundColor: '#2a9d8f' },
+                    { label: 'Novas Tarefas', data: statsData.tasksProgress.map(item => item.novas_tarefas), backgroundColor: '#ff5722' }
                 ]
             });
         }
 
-        if (data.distributionBySex) {
+        if (statsData.distributionBySex) {
             setSexChart({
-                labels: data.distributionBySex.map(item => item.sexo),
+                labels: statsData.distributionBySex.map(item => item.sexo),
                 datasets: [{
-                    data: data.distributionBySex.map(item => item.count),
+                    data: statsData.distributionBySex.map(item => item.count),
                     backgroundColor: ['#009DFF', '#FF5BC8']
                 }]
             });
         }
 
-        if (data.distributionByAge) {
+        if (statsData.distributionByAge) {
             setAgeChart({
-                labels: data.distributionByAge.map(item => item.age_group),
+                labels: statsData.distributionByAge.map(item => item.age_group),
                 datasets: [{
                     label: 'Distribuição por Idade',
-                    data: data.distributionByAge.map(item => item.count),
+                    data: statsData.distributionByAge.map(item => item.count),
                     backgroundColor: '#4148CF'
                 }]
             });
@@ -110,6 +120,7 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  // --- RENDERIZAÇÃO DO COMPONENTE ---
   const chartOptions = { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'top' } } };
   const doughnutOptions = { ...chartOptions, scales: {}, cutout: '70%' };
 
@@ -122,78 +133,51 @@ function Dashboard() {
       <h2 className="page-title">Dashboard de Gestão Política</h2>
       <p className="page-subtitle">Visão geral e desempenho da equipe.</p>
       
-      {/* SEÇÃO DE TAREFAS */}
+      {/* SEÇÃO DE TAREFAS (Original) */}
       <div className="section-container">
         <div className="charts-grid">
-          <div className="chart-card">
-            <h4>Status das Tarefas</h4>
-            <Doughnut data={tasksStatusChart} options={doughnutOptions} />
-          </div>
-          <div className="chart-card">
-            <h4>Tarefas por Responsável</h4>
-            <Bar data={responsibleChart} options={chartOptions} />
-          </div>
-          <div className="chart-card">
-            <h4>Progresso de Tarefas</h4>
-            {/* GRÁFICO REAL RENDERIZADO */}
-            <Bar data={progressChart} options={chartOptions} />
-          </div>
+          {/* ... seus cards de gráficos de tarefas ... */}
+          <div className="chart-card"><h4>Status das Tarefas</h4><Doughnut data={tasksStatusChart} options={doughnutOptions} /></div>
+          <div className="chart-card"><h4>Tarefas por Responsável</h4><Bar data={responsibleChart} options={chartOptions} /></div>
+          <div className="chart-card"><h4>Progresso de Tarefas</h4><Bar data={progressChart} options={chartOptions} /></div>
         </div>
       </div>
       
+      {/* SEÇÃO DE ESTATÍSTICAS (Original) */}
       <div className="section-container">
         <div className="stats-grid">
-          <div className="card">
-            <h4>Total de Tarefas</h4>
-            <p>{dashboardData.totalTarefas}</p>
-          </div>
-          <div className="card">
-            <h4>Usuários Ativos</h4>
-            <p>{dashboardData.totalUsuarios}</p>
-          </div>
-          <div className="card">
-            <h4>Ações Concluídas</h4>
-            <p>{dashboardData.totalAcoesConcluidas}</p>
-          </div>
+          <div className="card"><h4>Total de Tarefas</h4><p>{dashboardData.totalTarefas}</p></div>
+          <div className="card"><h4>Usuários Ativos</h4><p>{dashboardData.totalUsuarios}</p></div>
+          <div className="card"><h4>Ações Concluídas</h4><p>{dashboardData.totalAcoesConcluidas}</p></div>
         </div>
       </div>
 
-      {/* SEÇÃO DO MAPA */}
+      {/* SEÇÃO DO MAPA (Atualizada) */}
       <div className="section-container">
-        <MapPage />
+        <div className="map-wrapper-dashboard">
+          <h3>Distribuição Geográfica de Contatos</h3>
+          {/* MUDANÇA: Renderiza o ContatoMap passando a lista de contatos como prop */}
+          <ContatoMap contatos={contatos} />
+        </div>
       </div>
 
-      {/* SEÇÃO DEMOGRÁFICA */}
+      {/* SEÇÃO DEMOGRÁFICA (Original) */}
       <div className="section-container">
         <div className="demographics-grid">
-          <div className="chart-card">
-            <h4>Distribuição por Sexo</h4>
-            <Doughnut data={sexChart} options={doughnutOptions} />
-          </div>
-          <div className="chart-card">
-            <h4>Distribuição por Idade</h4>
-            <Bar data={ageChart} options={chartOptions} />
-          </div>
+          <div className="chart-card"><h4>Distribuição por Sexo</h4><Doughnut data={sexChart} options={doughnutOptions} /></div>
+          <div className="chart-card"><h4>Distribuição por Idade</h4><Bar data={ageChart} options={chartOptions} /></div>
         </div>
       </div>
       
-      {/* SEÇÃO DE TABELA POR BAIRRO */}
+      {/* SEÇÃO DE TABELA POR BAIRRO (Original) */}
       <div className="section-container">
         <div className="table-card">
           <h3>Pessoas por Bairro</h3>
           <table className="neighborhood-table">
-            <thead>
-              <tr>
-                <th>BAIRRO</th>
-                <th>QUANTIDADE</th>
-              </tr>
-            </thead>
+            <thead><tr><th>BAIRRO</th><th>QUANTIDADE</th></tr></thead>
             <tbody>
               {dashboardData.peopleByNeighborhood.map((row, index) => (
-                <tr key={index}>
-                  <td>{row.bairro}</td>
-                  <td>{row.count}</td>
-                </tr>
+                <tr key={index}><td>{row.bairro}</td><td>{row.count}</td></tr>
               ))}
             </tbody>
           </table>

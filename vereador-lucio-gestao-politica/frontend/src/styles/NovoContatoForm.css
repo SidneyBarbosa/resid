@@ -1,5 +1,3 @@
-/* frontend/src/styles/NovoContatoForm.css - VERSÃO COMPACTA */
-
 .form-container {
     background-color: #fff;
     padding: 2rem;
@@ -16,9 +14,8 @@
 
 .form-grid {
     display: grid;
-    /* MUDANÇA: Agora temos 3 colunas */
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 1rem; /* MUDANÇA: Espaçamento entre campos reduzido */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 }
 
 .form-group {
@@ -26,13 +23,12 @@
     flex-direction: column;
 }
 
-/* Classe para campos que ocupam a largura total */
 .form-group.span-3 {
-    grid-column: 1 / -1; /* Ocupa as 3 colunas */
+    grid-column: 1 / -1;
 }
 
 .form-group label {
-    margin-bottom: 0.4rem; /* MUDANÇA: Espaçamento sobre o campo reduzido */
+    margin-bottom: 0.4rem;
     font-weight: 500;
     font-size: 0.9rem;
 }
@@ -41,7 +37,7 @@
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 0.7rem 0.9rem; /* MUDANÇA: Altura dos campos reduzida */
+    padding: 0.7rem 0.9rem;
     font-size: 0.95rem;
     border-radius: 8px;
     border: 1px solid #dfe6e9;
@@ -62,10 +58,9 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    margin-top: 1.5rem; /* MUDANÇA: Espaçamento superior reduzido */
+    margin-top: 1.5rem;
 }
 
-/* Estilos dos botões (sem alteração) */
 .form-actions button {
     border: none;
     padding: 10px 20px;
@@ -91,3 +86,4 @@
     color: #bdc3c7;
     cursor: not-allowed;
 }
+
