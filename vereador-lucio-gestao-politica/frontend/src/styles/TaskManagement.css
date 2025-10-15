@@ -130,15 +130,14 @@
   font-size: 12px;
 }
 
-/* Novas regras de cor para as prioridades */
 .task-priority.priority-high {
-  background-color: #dc3545; /* Vermelho */
+  background-color: #dc3545;
 }
 .task-priority.priority-medium {
-  background-color: #c29306; /* Amarelo */
+  background-color: #c29306;
 }
 .task-priority.priority-low {
-  background-color: #17a2b8; /* Azul claro */
+  background-color: #17a2b8;
 }
 
 
@@ -188,7 +187,7 @@
 .responsible-initials {
   width: 24px;
   height: 24px;
-  background-color: #0d6efd; /* Cor padrão, será sobrescrita */
+  background-color: #0d6efd;
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -198,13 +197,12 @@
   font-weight: bold;
 }
 
-/* Novas regras de cor para as iniciais */
 .responsible-initials.priority-high {
-  background-color: #dc3545; /* Vermelho */
+  background-color: #dc3545;
 }
 .responsible-initials.priority-medium {
-  background-color: #c29306; /* Amarelo */
+  background-color: #c29306;
 }
 .responsible-initials.priority-low {
-  background-color: #17a2b8; /* Azul claro */
+  background-color: #17a2b8;
 }

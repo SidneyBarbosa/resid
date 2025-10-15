@@ -1,0 +1,173 @@
+.financeiro-container {
+    padding: 2rem;
+    background-color: #f4f7fa;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.page-header h1 {
+    margin: 0;
+    color: #333;
+}
+
+.page-header p {
+    margin: 0;
+    color: #777;
+}
+
+.breadcrumb {
+    margin-bottom: 2rem;
+    color: #007bff;
+}
+
+.breadcrumb span {
+    color: #555;
+}
+
+.financeiro-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.btn-export {
+    background-color: #28a745;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-group input,
+.form-group .currency-input {
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-message {
+    text-align: center;
+    margin-top: 1rem;
+    color: green;
+}
+
+.form-message.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.form-message.error {
+    background-color: #fdecea;
+    color: #b71c1c;
+}
+
+
+.registros-container {
+    margin-top: 2rem;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.registros-container h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #34495e;
+}
+
+.registros-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.registros-table th,
+.registros-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.registros-table th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.registros-table td {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.registros-table th:not(:first-child),
+.registros-table td:not(:first-child) {
+    text-align: right;
+}
+
+.registros-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.registros-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
