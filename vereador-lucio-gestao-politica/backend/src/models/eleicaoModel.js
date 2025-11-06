@@ -28,7 +28,6 @@ class EleicaoModel {
         
         const totalVotosCandidato = bairrosRes.rows.reduce((sum, row) => sum + parseInt(row.votos, 10), 0);
         
-        //Mapeia os resultados para calcular o percentual de cada bairro
         const bairrosComPercentual = bairrosRes.rows.map(bairro => ({
             ...bairro,
             percentual: totalVotosCandidato > 0 ? ((parseInt(bairro.votos, 10) / totalVotosCandidato) * 100).toFixed(2) : 0

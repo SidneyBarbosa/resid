@@ -1,6 +1,8 @@
+// frontend/src/components/Login.js
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api'; // <-- MUDANÇA: Importa a instância 'api' em vez de 'axios'
 import '../styles/login.css';
 
 function Login({ onLogin }) {
@@ -16,30 +18,43 @@ function Login({ onLogin }) {
     setIsSuccess(false);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, senha });
+      // MUDANÇA: Usa a instância 'api' para a chamada, que já sabe a baseURL.
+      const response = await api.post('/login', { email, senha });
 
       if (response.status === 200) {
+        // --- CORREÇÃO PRINCIPAL AQUI ---
+        
+        // PASSO 1: Extrai o token da resposta que o servidor enviou.
+        const { token } = response.data;
+
+        // PASSO 2: Guarda o token no localStorage do navegador para ser usado em outras páginas.
+        localStorage.setItem('authToken', token);
+        
+        // O resto da sua lógica original é mantido.
         setMessage('Login bem-sucedido! Redirecionando...');
         setIsSuccess(true);
-        onLogin();
+        if (onLogin) {
+          onLogin();
+        }
         setTimeout(() => {
-          navigate('/');
+          navigate('/'); // Redireciona para o Dashboard (página inicial)
         }, 1000);
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Erro de conexão com o servidor. Tente novamente.';
       setMessage(errorMessage);
       setIsSuccess(false);
-      console.error('Erro:', error);
+      console.error('Erro no login:', error);
     }
   };
 
+  // O seu JSX (a parte visual do componente) continua exatamente o mesmo.
   return (
     <div className="login-container">
       <div className="login-box">
         <div className="header-login">
-          <h1>Mandatuum</h1>
-          <p>Consultoria e Inteligência de dados</p>
+          <h1>Mandattum</h1>
+          <p>Consultoria e Inteligência de Dados</p>
         </div>
         <div className="content">
           <h2>Login</h2>

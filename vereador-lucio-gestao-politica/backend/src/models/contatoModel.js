@@ -1,9 +1,7 @@
-// backend/src/models/contatoModel.js
 const db = require('../database/db');
 
 class Contato {
     static async create(data) {
-        // Adicionados os novos campos
         const { profile_id, nome_completo, email, telefone, endereco, bairro, cidade, estado, cep, data_nascimento, sexo, latitude, longitude, escolaridade, assessor_parlamentar, assunto, observacao } = data;
         const query = `
             INSERT INTO "contatos" (profile_id, nome_completo, email, telefone, endereco, bairro, cidade, estado, cep, data_nascimento, sexo, latitude, longitude, escolaridade, assessor_parlamentar, assunto, observacao)
@@ -16,13 +14,11 @@ class Contato {
     }
 
     static async findAll() {
-        // ... (sem alterações aqui)
         const result = await db.query('SELECT * FROM "contatos" ORDER BY nome_completo ASC');
         return result.rows;
     }
 
     static async update(id, data) {
-        // Adicionados os novos campos
         const { nome_completo, email, telefone, endereco, bairro, cidade, estado, cep, data_nascimento, sexo, latitude, longitude, escolaridade, assessor_parlamentar, assunto, observacao } = data;
         const query = `
             UPDATE "contatos"
@@ -36,7 +32,6 @@ class Contato {
     }
 
     static async delete(id) {
-        // ... (sem alterações aqui)
         const result = await db.query('DELETE FROM "contatos" WHERE id = $1 RETURNING *;', [id]);
         return result.rows[0];
     }
