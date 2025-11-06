@@ -1,4 +1,3 @@
-// src/components/HeatmapLayer.js
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import 'leaflet.heat';
