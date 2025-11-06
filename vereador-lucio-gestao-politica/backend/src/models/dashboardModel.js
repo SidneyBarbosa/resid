@@ -13,9 +13,8 @@ class DashboardModel {
             db.query('SELECT COUNT(*) as count FROM "acoes" WHERE status = $1', ['concluida']),
             db.query('SELECT sexo, COUNT(*) as count FROM "contatos" WHERE sexo IS NOT NULL GROUP BY sexo'),
             db.query('SELECT bairro, COUNT(*) as count FROM "contatos" WHERE bairro IS NOT NULL AND bairro != \'\' GROUP BY bairro ORDER BY count DESC'),
-            // CONSULTA DE IDADE COMPLETA:
             db.query(`
-                SELECT 
+                SELECT
                     CASE
                         WHEN DATE_PART('year', age(data_nascimento)) BETWEEN 18 AND 24 THEN '18-24'
                         WHEN DATE_PART('year', age(data_nascimento)) BETWEEN 25 AND 34 THEN '25-34'
@@ -30,7 +29,6 @@ class DashboardModel {
                 GROUP BY age_group
                 ORDER BY age_group;
             `),
-            //QUERY PARA PROGRESSO DE TAREFAS
             db.query(`
                 SELECT
                     to_char(date_trunc('month', d.month), 'YYYY-MM') AS month,

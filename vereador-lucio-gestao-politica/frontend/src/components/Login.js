@@ -53,8 +53,8 @@ function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-box">
         <div className="header-login">
-          <h1>Mandatuum</h1>
-          <p>Consultoria e Inteligência de dados</p>
+          <h1>Mandattum</h1>
+          <p>Consultoria e Inteligência de Dados</p>
         </div>
         <div className="content">
           <h2>Login</h2>

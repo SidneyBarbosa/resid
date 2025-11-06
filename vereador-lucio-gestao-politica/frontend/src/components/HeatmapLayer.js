@@ -1,5 +1,3 @@
-// src/components/HeatmapLayer.js
-
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import 'leaflet.heat';
@@ -13,23 +11,36 @@ const HeatmapLayer = ({ points }) => {
       return;
     }
 
-    // Cria a camada de calor (heatmap)
     const heatLayer = L.heatLayer(points, {
-      radius: 25,
-      blur: 15,
-      maxZoom: 18,
+      // --- MUDANÇAS APLICADAS ---
+
+      // 1. RAIO: Aumentado para 40 (ajuste como preferir)
+      radius: 40,
+      
+      // 2. MAX: Este é o ajuste crucial.
+      // Define a intensidade máxima. Nossos pontos valem '1'.
+      // Aqui, 10 pontos sobrepostos = intensidade máxima.
+      max: 10,
+
+      // 3. GRADIENTE: Trocado para HEX para garantir compatibilidade.
+      // O gradiente agora será visível.
+      gradient: {
+        0.0: '#0000FF', // 0% (Baixa intensidade) -> Azul
+        0.4: '#00FFFF', // 40% -> Ciano
+        0.6: '#00FF00', // 60% -> Verde
+        0.8: '#FFFF00', // 80% -> Amarelo
+        1.0: '#FF0000'  // 100% (Alta intensidade) -> Vermelho
+      }
     });
 
-    // Adiciona a camada ao mapa
     map.addLayer(heatLayer);
 
-    // Função de "limpeza": remove a camada quando o componente for desmontado
     return () => {
       map.removeLayer(heatLayer);
     };
-  }, [map, points]); // O efeito será re-executado se o mapa ou os pontos mudarem
+  }, [map, points]);
 
-  return null; // Este componente não renderiza nada visível diretamente
+  return null;
 };
 
 export default HeatmapLayer;
