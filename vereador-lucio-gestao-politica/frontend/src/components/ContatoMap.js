@@ -1,4 +1,3 @@
-// frontend/src/components/ContatoMap.js
 import React, { useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import HeatmapLayer from './HeatmapLayer';
@@ -38,20 +37,32 @@ const ContatoMap = ({ contatos }) => {
       contatos: clusters[bairro].contatos
     }));
 
+    // Prepara os dados para o heatmap no formato [lat, lng, intensidade]
     const heatData = validContatos.map(c => [parseFloat(c.latitude), parseFloat(c.longitude), 1]);
 
     return { points, clusters: clusterArray, heatData };
   }, [contatos]);
 
-  return (
+
+  console.log("Dados enviados para o Heatmap:", heatData);
+
+
+ return (
     <>
-      <div id="map-controls-container" className="map-view-switcher">
-        <button onClick={() => setViewMode('points')} className={`switcher-button ${viewMode === 'points' ? 'active' : ''}`}><i className="bi bi-geo-alt-fill"></i> Pontos Individuais</button>
-        <button onClick={() => setViewMode('clusters')} className={`switcher-button ${viewMode === 'clusters' ? 'active' : ''}`}><i className="bi bi-pin-map-fill"></i> Contadores por Bairro</button>
-        <button onClick={() => setViewMode('heatmap')} className={`switcher-button heatmap-btn ${viewMode === 'heatmap' ? 'active' : ''}`}><i className="bi bi-thermometer-half"></i> Mapa de Calor</button>
-      </div>
+      {/* OS BOTÕES FORAM REMOVIDOS DAQUI */}
 
       <MapContainer center={[-10.9167, -37.0500]} zoom={12} scrollWheelZoom={true} className="leaflet-container">
+        
+        {/* --- CORREÇÃO APLICADA AQUI --- */}
+        {/* OS BOTÕES FORAM MOVIDOS PARA DENTRO DO MAPCONTAINER */}
+        {/* Isso os torna um "controle" do mapa, como o zoom */ }
+        <div id="map-controls-container" className="map-view-switcher">
+          <button onClick={() => setViewMode('points')} className={`switcher-button ${viewMode === 'points' ? 'active' : ''}`}><i className="bi bi-geo-alt-fill"></i> Pontos Individuais</button>
+          <button onClick={() => setViewMode('clusters')} className={`switcher-button ${viewMode === 'clusters' ? 'active' : ''}`}><i className="bi bi-pin-map-fill"></i> Contadores por Bairro</button>
+          <button onClick={() => setViewMode('heatmap')} className={`switcher-button heatmap-btn ${viewMode === 'heatmap' ? 'active' : ''}`}><i className="bi bi-thermometer-half"></i> Mapa de Calor</button>
+        </div>
+        
+        {/* O resto do seu mapa */}
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {viewMode === 'points' && points.map(contato => (
@@ -64,15 +75,9 @@ const ContatoMap = ({ contatos }) => {
         })}
 
         {viewMode === 'heatmap' && (
-          <HeatmapLayer
-            points={heatData}
-            longitudeExtractor={m => m[1]}
-            latitudeExtractor={m => m[0]}
-            intensityExtractor={m => m[2]}
-            radius={25}
-            blur={15}
-          />
+          <HeatmapLayer points={heatData} />
         )}
+        
       </MapContainer>
     </>
   );

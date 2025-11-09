@@ -30,7 +30,7 @@ const AcaoFormModal = ({ onClose, onSave, acaoToEdit }) => {
     useEffect(() => {
         const fetchMunicipios = async () => {
             try {
-                const response = await api.get('/municipios'); 
+                const response = await api.get('/municipios');
                 setMunicipios(response.data);
             } catch (error) {
                 console.error("Falha ao buscar municípios", error);

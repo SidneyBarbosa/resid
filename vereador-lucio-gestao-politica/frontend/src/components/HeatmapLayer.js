@@ -1,4 +1,3 @@
-// src/components/HeatmapLayer.js
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import 'leaflet.heat';
@@ -12,34 +11,32 @@ const HeatmapLayer = ({ points }) => {
       return;
     }
 
+    // Cria a camada de calor (com as nossas configurações)
     const heatLayer = L.heatLayer(points, {
-      // --- MUDANÇAS APLICADAS ---
-
-      // 1. RAIO: Aumentado para 40 (ajuste como preferir)
-      radius: 40,
-      
-      // 2. MAX: Este é o ajuste crucial.
-      // Define a intensidade máxima. Nossos pontos valem '1'.
-      // Aqui, 10 pontos sobrepostos = intensidade máxima.
-      max: 10,
-
-      // 3. GRADIENTE: Trocado para HEX para garantir compatibilidade.
-      // O gradiente agora será visível.
+      radius: 70,
+      blur: 30,
+      max: 20.0,
       gradient: {
-        0.0: '#0000FF', // 0% (Baixa intensidade) -> Azul
-        0.4: '#00FFFF', // 40% -> Ciano
-        0.6: '#00FF00', // 60% -> Verde
-        0.8: '#FFFF00', // 80% -> Amarelo
-        1.0: '#FF0000'  // 100% (Alta intensidade) -> Vermelho
+        0.0: '#0000FF', // Azul
+        0.4: '#00FFFF', // Ciano
+        0.6: '#00FF00', // Verde
+        0.8: '#FFFF00', // Amarelo
+        1.0: '#FF0000'  // Vermelho
       }
     });
 
-    map.addLayer(heatLayer);
+    const timer = setTimeout(() => {
+      map.addLayer(heatLayer);
+    }, 100); // 100 milissegundos de atraso
 
+    // A "função de limpeza" do useEffect
     return () => {
-      map.removeLayer(heatLayer);
+      clearTimeout(timer); // Limpa o timer se o componente for desmontado
+      if (map.hasLayer(heatLayer)) {
+        map.removeLayer(heatLayer);
+      }
     };
-  }, [map, points]);
+  }, [map, points]); // Re-executa se o mapa ou os pontos mudarem
 
   return null;
 };
