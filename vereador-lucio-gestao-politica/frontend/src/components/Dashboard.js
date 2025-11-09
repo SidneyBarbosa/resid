@@ -14,7 +14,7 @@ import {
   LineElement
 } from 'chart.js';
 import '../styles/Dashboard.css';
-import ContatoMap from './ContatoMap'; // <-- MUDANÇA: Importa o mapa reutilizável
+import ContatoMap from './ContatoMap';
 import api from '../services/api';
 
 // Registrar os componentes do ChartJS
