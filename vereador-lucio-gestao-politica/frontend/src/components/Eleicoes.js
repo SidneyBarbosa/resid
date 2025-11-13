@@ -16,6 +16,7 @@ function Eleicoes() {
   useEffect(() => {
     const fetchEleicaoData = async () => {
       try {
+        // Correção: Adicione o parâmetro 'ano' de volta na chamada da API
         const response = await api.get('/eleicoes/stats', { params: { ano: 2024 } });
         const data = response.data;
         setStats(data);
@@ -64,8 +65,8 @@ function Eleicoes() {
   return (
     <div className="eleicao-page">
       <div className="eleicao-header">
-        <h2>Eleição 2024</h2>
-        <p>Resultado Eleitoral 2024 - Vereador Lúcio Flávio</p>
+        <h2>Eleições</h2>
+        <p>Resultado Eleitoral</p>
       </div>
 
       <div className="stats-cards-row">
@@ -80,13 +81,12 @@ function Eleicoes() {
       </div>
 
       <div className="chart-container-eleicao">
-        <h3>10 Bairros com Mais Votos em 2024</h3>
+        <h3>10 Bairros com Mais Votos</h3>
         <div className="chart-wrapper">
           <Bar data={chartData} options={chartOptions} />
         </div>
       </div>
 
-      {/*Adicionar o componente da tabela de resultados */}
       <ResultadosBairro />
 
     </div>

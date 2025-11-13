@@ -96,7 +96,7 @@ const TaskManagement = () => {
         console.error("Erro ao atualizar status da tarefa:", err);
         setError("Não foi possível salvar a mudança de status.");
         // Reverte a mudança na UI se a API falhar
-        setTasks(tasks.map(t => t.id === draggableId ? task : t)); 
+        setTasks(tasks.map(t => t.id === draggableId ? task : t));
       }
     }
   };
@@ -133,7 +133,7 @@ const TaskManagement = () => {
           <p>Organize e acompanhe o progresso das tarefas</p>
         </div>
         <button className="new-task-button" onClick={() => handleOpenForm()}>
-          Nova Tarefa
+          + Nova Tarefa
         </button>
       </div>
 

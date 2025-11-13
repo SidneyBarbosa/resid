@@ -124,7 +124,6 @@ const Financeiro = () => {
         <div className="financeiro-container">
             {/* ... Seu cabeçalho e formulário continuam aqui ... */}
             <header className="page-header"><div><h1>Financeiro</h1><p>Gerencie informações financeiras</p></div></header>
-            <nav className="breadcrumb"><span>Início</span> &gt; <span>Financeiro</span></nav>
             <form className="financeiro-form" onSubmit={handleSubmit}>
                 <div className="form-header"><h2>Novo Registro Financeiro</h2><button type="button" className="btn-export">Exportar Excel</button></div>
                 <div className="form-grid">

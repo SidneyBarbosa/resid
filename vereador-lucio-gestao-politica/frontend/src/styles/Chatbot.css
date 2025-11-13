@@ -1,0 +1,101 @@
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 50px;
+    width: 350px;
+    height: 500px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.chatbot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #0d47a1;
+    color: white;
+}
+
+.chatbot-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.chatbot-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+}
+
+.chatbot-messages {
+    flex-grow: 1; 
+    padding: 15px;
+    overflow-y: auto; 
+    background-color: #f4f7f6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.message.bot {
+    background-color: #e9ecef;
+    color: #333;
+    align-self: flex-start; 
+    border-bottom-left-radius: 4px;
+}
+
+.message.user {
+    background-color: #0d47a1;
+    color: white;
+    align-self: flex-end; 
+    border-bottom-right-radius: 4px;
+}
+
+.chatbot-input-form {
+    display: flex;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.chatbot-input-form input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    margin-right: 10px;
+}
+
+.chatbot-input-form input:focus {
+    outline: none;
+    border-color: #0d47a1;
+}
+
+.chatbot-input-form button {
+    background-color: #0d47a1;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

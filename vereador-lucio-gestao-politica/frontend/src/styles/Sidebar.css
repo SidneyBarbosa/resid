@@ -10,6 +10,8 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
   transform: translateX(-100%);
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar.open {
@@ -29,10 +31,18 @@
   font-weight: bold;
 }
 
+.sidebar-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
 .sidebar-menu {
   list-style: none;
   padding: 0;
   margin: 20px 0;
+  flex-grow: 1;
 }
 
 .sidebar-menu li {
@@ -56,4 +66,18 @@
 .menu-icon {
   margin-right: 10px;
   font-size: 1.2rem;
+}
+
+.sidebar-logout {
+  padding: 0;
+  margin: 20px 0;
+}
+
+.logout-link {
+  border: 1px solid transparent;
+}
+
+.logout-link:hover {
+  background-color: #dc3545;
+  border-color: #ff5c6d;
 }

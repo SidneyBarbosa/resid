@@ -1,142 +1,207 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import api from '../services/api';
+import AcaoFormModal from '../components/AcaoFormModal';
+import ConfirmModal from '../components/ConfirmModal';
+import DataMap from '../components/DataMap'; // Usa o mapa unificado
 import '../styles/Actions.css';
-import ContatoMap from './ContatoMap';
-import AcaoFormModal from './AcaoFormModal';
 
-const formatDateForDisplay = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const day = String(date.getUTCDate()).padStart(2, '0');
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const year = date.getUTCFullYear();
-    return `${day}/${month}/${year}`;
+// --- Função Auxiliar (Tabela) ---
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 };
+// ---------------------------------
 
-function Actions() {
-    const [actions, setActions] = useState([]);
-    const [contatos, setContatos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [filtroBairro, setFiltroBairro] = useState('');
+const Actions = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [acaoEmEdicao, setAcaoEmEdicao] = useState(null); // Estado-chave para o ícone
+  const [acoes, setAcoes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('');
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [acaoToEdit, setAcaoToEdit] = useState(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [acaoToDeleteId, setAcaoToDeleteId] = useState(null);
 
-    const fetchActions = useCallback(async () => {
-        try {
-            const response = await api.get('/acoes');
-            setActions(response.data);
-        } catch (error) {
-            console.error("Erro ao buscar ações:", error);
-        }
-    }, []);
+  const fetchAcoes = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/acoes');
+      setAcoes(response.data);
+    } catch (err) {
+      setError('Falha ao carregar ações.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const contatosResponse = await api.get('/contatos');
-            setContatos(contatosResponse.data);
-            await fetchActions();
-            setLoading(false);
-        };
-        fetchData();
-    }, [fetchActions]);
+  useEffect(() => {
+    fetchAcoes();
+  }, []);
 
-    const filteredActions = useMemo(() => {
-        return actions.filter(action =>
-            action.bairro?.toLowerCase().includes(filtroBairro.toLowerCase())
-        );
-    }, [actions, filtroBairro]);
+  const handleOpenModal = (acao = null) => {
+    setAcaoEmEdicao(acao); // Define qual ação está em edição
+    setIsModalOpen(true);
+  };
 
-   
-    const handleSave = async (formData) => {
-        try {
-            if (acaoToEdit) {
-                
-                await api.put(`/acoes/${acaoToEdit.id}`, formData);
-            } else {
-                
-                await api.post('/acoes', formData);
-            }
-            await fetchActions();
-            setIsModalOpen(false);
-        } catch (error) {
-            console.error("Erro ao salvar ação:", error);
-            alert("Falha ao salvar a ação. Verifique o console.");
-        }
-    };
+  const handleCloseModal = () => {
+    setAcaoEmEdicao(null); // Limpa a ação em edição
+    setIsModalOpen(false);
+  };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Tem certeza que deseja excluir esta ação?')) {
-            try {
-                await api.delete(`/acoes/${id}`);
-                setActions(actions.filter(a => a.id !== id));
-            } catch (error) {
-                console.error("Erro ao excluir ação:", error);
-            }
-        }
-    };
+  const handleSave = async (acaoData) => {
+    try {
+      if (acaoEmEdicao) {
+        await api.put(`/acoes/${acaoEmEdicao.id}`, acaoData);
+      } else {
+        await api.post('/acoes', acaoData);
+      }
+      await fetchAcoes();
+      handleCloseModal();
+    } catch (error) {
+      console.error("Erro ao salvar ação:", error);
+      throw error; 
+    }
+  };
 
-    const handleOpenCreateModal = () => {
-        setAcaoToEdit(null);
-        setIsModalOpen(true);
-    };
+  const handleOpenConfirmModal = (id) => {
+    setAcaoToDeleteId(id);
+    setIsConfirmModalOpen(true);
+  };
 
-    const handleOpenEditModal = (action) => {
-        setAcaoToEdit(action);
-        setIsModalOpen(true);
-    };
+  const handleCloseConfirmModal = () => {
+    setAcaoToDeleteId(null);
+    setIsConfirmModalOpen(false);
+  };
 
-    if (loading) return <p>Carregando...</p>;
+  const handleConfirmDelete = async () => {
+    if (acaoToDeleteId) {
+      try {
+        await api.delete(`/acoes/${acaoToDeleteId}`);
+        await fetchAcoes();
+        handleCloseConfirmModal();
+      } catch (error) {
+        console.error("Erro ao deletar ação:", error);
+        handleCloseConfirmModal();
+      }
+    }
+  };
 
-    return (
-        <>
-            <div className="map-wrapper-actions">
-                <h3>Mapa de Contatos em Aracaju</h3>
-                <ContatoMap contatos={contatos} />
-            </div>
+  const filteredAcoes = useMemo(() =>
+    acoes.filter(acao =>
+      (acao.bairro && acao.bairro.toLowerCase().includes(filter.toLowerCase())) ||
+      (acao.titulo && acao.titulo.toLowerCase().includes(filter.toLowerCase()))
+    ), [acoes, filter]
+  );
 
-            <div className="page-container">
-                <div className="actions-header">
-                    <div className="header-title"><h2>Registro de Ações</h2></div>
-                    <div className="header-actions">
-                        <input type="text" placeholder="Filtrar por bairro..." className="filter-input" value={filtroBairro} onChange={e => setFiltroBairro(e.target.value)} />
-                        <button className="add-button" onClick={handleOpenCreateModal}>+ Nova Ação</button>
-                    </div>
-                </div>
+  return (
+    <div className="page-container">
+      <div className="actions-header">
+        <div className="header-title">
+          <h2>Registro de Ações</h2>
+        </div>
+        <div className="header-actions">
+          <input
+            type="text"
+            className="filter-input"
+            placeholder="Filtrar por título ou bairro..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <button className="add-button" onClick={() => handleOpenModal(null)}>
+            + Nova Ação
+          </button>
+        </div>
+      </div>
 
-                <div className="table-container">
-                    <table className="data-table">
-                        <thead><tr><th>TÍTULO</th><th>BAIRRO</th><th>TIPO DA AÇÃO</th><th>DATA</th><th>AÇÕES</th></tr></thead>
-                        <tbody>
-                            {filteredActions.map(action => (
-                                <tr key={action.id}>
-                                    <td>{action.titulo || '-'}</td>
-                                    <td>{action.bairro}</td>
-                                    <td>{action.tipo}</td>
-                                    <td>{formatDateForDisplay(action.data)}</td>
-                                    <td className="actions-cell">
-                                        <button className="icon-btn edit-btn" title="Editar" onClick={() => handleOpenEditModal(action)}>✏️</button>
-                                        <button className="icon-btn delete-btn" title="Excluir" onClick={() => handleDelete(action.id)}>🗑️</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+      <div className="map-page-container">
+        <div className="map-header">
+          <h2 className="map-title" style={{ fontSize: '1.5rem', marginBottom: 0 }}>Mapa de Ações</h2>
+        </div>
+        
+        <DataMap 
+          data={acoes} 
+          titleField="titulo"
+          dateField="data"
+          entityName="ações"
+        />
+      </div>
 
-                {/* --- RENDERIZA O NOVO MODAL --- */}
-                {/* O modal só é mostrado quando isModalOpen é true */}
-                {isModalOpen && (
-                    <AcaoFormModal
-                        onClose={() => setIsModalOpen(false)}
-                        onSave={handleSave}
-                        acaoToEdit={acaoToEdit}
-                    />
-                )}
-            </div>
-        </>
-    );
-}
+
+      {/* --- TABELA DE AÇÕES --- */}
+      <div className="table-container" style={{ marginTop: '2rem' }}>
+        {loading ? (
+          <p>Carregando...</p>
+        ) : error ? (
+          <p style={{ color: 'red' }}>{error}</p>
+        ) : (
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>TÍTULO</th>
+                <th>BAIRRO</th>
+                <th>TIPO DA AÇÃO</th>
+                <th>DATA</th>
+                {/* CUSTO REMOVIDO */}
+                <th>AÇÕES</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAcoes.map(acao => {
+                // Lógica para destacar o ícone
+                const isEditing = acaoEmEdicao?.id === acao.id;
+
+                return (
+                  <tr key={acao.id}>
+                    <td>{acao.titulo}</td>
+                    <td>{acao.bairro || '-'}</td>
+                    <td>{acao.tipo}</td>
+                    <td>{formatDate(acao.data)}</td>
+                    {/* CUSTO REMOVIDO */}
+                    <td className="actions-cell">
+                      
+                      <button 
+                        className={`action-icon-button edit-btn ${isEditing ? 'active' : ''}`} 
+                        onClick={() => handleOpenModal(acao)}
+                      >
+                        <i className="bi bi-pencil-fill"></i>
+                      </button>
+
+                      <button 
+                        className="action-icon-button delete-btn" 
+                        onClick={() => handleOpenConfirmModal(acao.id)}
+                      >
+                        <i className="bi bi-trash-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+      {/* --- FIM DA TABELA --- */}
+
+      {/* --- MODAIS --- */}
+      {isModalOpen && (
+        <AcaoFormModal
+          onClose={handleCloseModal}
+          onSave={handleSave}
+          acaoEmEdicao={acaoEmEdicao}
+        />
+      )}
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        message="Tem certeza que deseja excluir esta ação?"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCloseConfirmModal}
+      />
+    </div>
+  );
+};
 
 export default Actions;

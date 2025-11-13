@@ -1,27 +1,27 @@
-const db = require('../database/db');
-const EleicaoModel = require('../models/eleicaoModel');
+const eleicaoModel = require('../models/eleicaoModel');
 
-exports.getEleicaoStats = async (req, res) => {
-    try {
-        const { ano } = req.query;
-        if (!ano) {
-            return res.status(400).json({ message: 'O ano é um parâmetro obrigatório.' });
+class EleicoesController {
+    static async getAllEleicoes(req, res) {
+        try {
+            const data = await eleicaoModel.getAll();
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        const stats = await EleicaoModel.getStatsByYear(parseInt(ano, 10));
-        res.status(200).json(stats);
-    } catch (err) {
-        console.error('Erro ao buscar estatísticas da eleição:', err.message);
-        res.status(500).json({ message: 'Erro no servidor.' });
     }
-};
 
-
-exports.getAllEleicoes = async (req, res) => {
-    try {
-        const result = await db.query('SELECT * FROM eleicoes');
-        res.json(result.rows);
-    } catch (error) {
-        console.error('Erro ao buscar eleições:', error);
-        res.status(500).send('Erro no servidor ao buscar eleições.');
+    static async getEleicaoStats(req, res) {
+        try {
+            // Correção: Tornamos o 'ano' opcional.
+            // Se o frontend não enviar um ano, ele usará 2024 como padrão.
+            const { ano = 2024 } = req.query; 
+            
+            const data = await eleicaoModel.getStats(ano);
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
-};
+}
+
+module.exports = EleicoesController;

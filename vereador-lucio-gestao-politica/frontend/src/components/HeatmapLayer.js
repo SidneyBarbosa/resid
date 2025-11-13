@@ -1,42 +1,50 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
-import 'leaflet.heat';
+import 'leaflet.heat'; 
 import L from 'leaflet';
 
 const HeatmapLayer = ({ points }) => {
   const map = useMap();
+  const heatLayerRef = useRef(null); 
 
   useEffect(() => {
-    if (!map || !points || points.length === 0) {
+    if (!points || points.length === 0) {
+      if (heatLayerRef.current && map.hasLayer(heatLayerRef.current)) {
+        map.removeLayer(heatLayerRef.current);
+      }
       return;
     }
 
-    // Cria a camada de calor (com as nossas configurações)
-    const heatLayer = L.heatLayer(points, {
-      radius: 70,
-      blur: 30,
-      max: 20.0,
+    const options = {
+      radius: 80,
+      blur: 60,
+      maxZoom: 18,
+      minOpacity: 0.2,
+      max: 0.5, 
       gradient: {
-        0.0: '#0000FF', // Azul
-        0.4: '#00FFFF', // Ciano
-        0.6: '#00FF00', // Verde
-        0.8: '#FFFF00', // Amarelo
-        1.0: '#FF0000'  // Vermelho
-      }
-    });
-
-    const timer = setTimeout(() => {
-      map.addLayer(heatLayer);
-    }, 100); // 100 milissegundos de atraso
-
-    // A "função de limpeza" do useEffect
-    return () => {
-      clearTimeout(timer); // Limpa o timer se o componente for desmontado
-      if (map.hasLayer(heatLayer)) {
-        map.removeLayer(heatLayer);
+        0.4: 'blue',
+        0.6: 'cyan',
+        0.7: 'lime',
+        0.8: 'yellow',
+        1.0: 'red'
       }
     };
-  }, [map, points]); // Re-executa se o mapa ou os pontos mudarem
+
+    if (!heatLayerRef.current) {
+      heatLayerRef.current = L.heatLayer(points, options);
+      map.addLayer(heatLayerRef.current);
+    } else {
+      heatLayerRef.current.setLatLngs(points);
+      heatLayerRef.current.setOptions(options);
+    }
+
+    return () => {
+      if (map.hasLayer(heatLayerRef.current)) {
+        map.removeLayer(heatLayerRef.current);
+        heatLayerRef.current = null;
+      }
+    };
+  }, [map, points]); 
 
   return null;
 };
