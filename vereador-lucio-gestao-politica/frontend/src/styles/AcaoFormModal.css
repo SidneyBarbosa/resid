@@ -8,8 +8,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  /* Corrigido: z-index maior para ficar sobre a sidebar */
+  z-index: 1050; 
 }
+
 
 .modal-content {
   background: white;

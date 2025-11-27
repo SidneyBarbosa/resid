@@ -27,15 +27,24 @@
   margin-bottom: 30px;
 }
 
+/* Título para as novas seções (como "Resumo de Atividades") */
+.section-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
 .demographics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
@@ -47,15 +56,14 @@
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 400px;
+  height: 350px;
   overflow: hidden;
 }
 
 .chart-card canvas {
   width: 100% !important;
-  height: auto !important;
+  flex-grow: 1;
+  max-height: 280px; 
 }
 
 .chart-card:hover {
@@ -68,11 +76,12 @@
   color: #333;
   margin-bottom: 20px;
   text-align: center;
+  flex-shrink: 0; 
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -243,21 +252,197 @@
   margin: 0;
 }
 
+
+/* --- ESTILOS PARA O HEADER E BOTÃO DO CHATBOT --- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-end; 
+  margin-bottom: 30px; 
+}
+
+.page-subtitle {
+  margin-bottom: 0;
+}
+
+.chatbot-button {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: #0d47a1; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  white-space: nowrap; 
+  margin-top: 10px; 
+  margin-right: 20px;
+}
+
+.chatbot-button:hover {
+  background-color: #0b3a82; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 500px) {
+  .dashboard-header {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .chatbot-button {
+      margin-top: 0; 
+  }
+}
+
+/* --- NOVOS ESTILOS PARA RELATÓRIO DINÂMICO --- */
+/* (Substitui os estilos .report-grid-container e .report-summary-card) */
+
+/* 1. Barra de seleção de período */
+.report-time-selector {
+  display: flex;
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 20px;
+  width: fit-content; /* Faz a barra se ajustar ao tamanho dos botões */
+}
+
+.time-btn {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.time-btn:hover {
+  color: #000;
+}
+
+.time-btn.active {
+  background-color: #ffffff;
+  color: #0d47a1;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. Card de Resumo Dinâmico */
+.dynamic-summary-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.summary-header h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+}
+
+/* 3. Grid de 4 colunas para os stats */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.summary-item {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.summary-item span {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.summary-item strong {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0d47a1;
+  display: block;
+}
+
+/* Botão de Gerar Relatório (estilo reutilizado) */
+.generate-report-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: #0d47a1; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.generate-report-btn:hover {
+  background-color: #0b3a82;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Media Queries (Responsividade) --- */
+
+@media (max-width: 992px) {
+  .charts-grid,
+  .stats-grid,
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas em tablets */
+  }
+  .demographics-grid {
+    grid-template-columns: 1fr; /* 1 coluna para demografia */
+  }
+}
+
 @media (max-width: 768px) {
   .charts-grid,
   .stats-grid,
-  .demographics-grid {
-    grid-template-columns: 1fr;
+  .demographics-grid,
+  .summary-grid {
+    grid-template-columns: 1fr; /* 1 coluna em celulares */
+  }
+  
+  .report-time-selector {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2x2 grid para botões */
   }
 
   .dashboard-page {
     padding: 15px;
   }
-
   .page-title {
     font-size: 2rem;
   }
-
   .page-subtitle {
     font-size: 1rem;
   }

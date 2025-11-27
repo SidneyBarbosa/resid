@@ -14,8 +14,9 @@
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    /* Alterado para 2 colunas para campos principais */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1.25rem; /* Aumentei o espaçamento */
 }
 
 .form-group {
@@ -23,7 +24,8 @@
     flex-direction: column;
 }
 
-.form-group.span-3 {
+/* Nova classe para campos de largura total */
+.form-group.full-width {
     grid-column: 1 / -1;
 }
 
@@ -40,14 +42,25 @@
     padding: 0.7rem 0.9rem;
     font-size: 0.95rem;
     border-radius: 8px;
-    border: 1px solid #dfe6e9;
+    border: 1px solid #dfe6e9; /* Borda mais suave */
     box-sizing: border-box;
+    background-color: #f8f9fa; /* Fundo levemente cinza */
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0d47a1;
+    box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
+}
+
 
 .form-group small {
     margin-top: 5px;
     font-size: 0.8rem;
-    color: #7f8c8d;
+    color: #8d847f;
 }
 
 .form-group textarea {
@@ -61,29 +74,51 @@
     margin-top: 1.5rem;
 }
 
+/* --- ESTILO DOS BOTÕES (CORRIGIDO) --- */
+
+/* Estilo base para TODOS os botões na barra de ações */
 .form-actions button {
-    border: none;
+    border: 1px solid transparent; /* Borda transparente por padrão */
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
+/* Botão de Salvar (Principal) */
 .submit-button {
     background-color: #0d47a1;
     color: white;
+    border-color: #0d47a1;
 }
 
+.submit-button:hover {
+    background-color: #0b3a82;
+}
+
+/* Botão Limpar (Secundário) */
 .secondary-button {
-    background-color: #f0f2f5;
-    color: #333;
-    border: 1px solid #dfe6e9;
+    background-color: #eb4c20;
+    color: #ffffff;
 }
 
+.secondary-button:hover {
+    background-color: #ea0f0c;
+}
+
+/* Botão desabilitado (Imprimir) */
 .secondary-button:disabled {
     background-color: #f8f9fa;
     color: #bdc3c7;
+    border-color: #f8f9fa;
     cursor: not-allowed;
 }
 
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

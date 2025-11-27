@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+// frontend/src/App.js (Limpo e Correto)
+
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
@@ -11,12 +13,13 @@ import Eleicoes from './components/Eleicoes';
 import Cadastro from './components/Cadastro';
 import Financeiro from './components/Financeiro';
 import Configuracoes from './components/Configuracoes';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute'; // Este arquivo agora está correto
 import './styles/Global.css';
 import './styles/App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-// Componente de layout que envolve as rotas internas
+// O DashboardLayout está perfeito. O <Outlet/> aqui é o que renderiza 
+// as páginas filhas (Dashboard, Acoes, etc.)
 function DashboardLayout({ isSidebarOpen, toggleSidebar }) {
   return (
     <div className="app-layout">
@@ -24,7 +27,7 @@ function DashboardLayout({ isSidebarOpen, toggleSidebar }) {
       <div className={`main-content-wrapper ${isSidebarOpen ? 'shifted' : ''}`}>
         <Header isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <main className="main-content">
-          <Outlet />
+          <Outlet /> 
         </main>
       </div>
     </div>
@@ -33,46 +36,38 @@ function DashboardLayout({ isSidebarOpen, toggleSidebar }) {
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loadingAuth, setLoadingAuth] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  useEffect(() => {
-    setLoadingAuth(false);
-  }, []);
-
-  if (loadingAuth) {
-    return <div>Carregando...</div>;
-  }
-
-  function ProtectedRoute() {
-    return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
-  }
+  // A função handleLogin e a prop onLogin foram removidas.
+  // Elas não são mais necessárias.
 
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        {/* Rota Pública */}
+        <Route path="/login" element={<Login />} />
         
-        {/* Rotas protegidas: só podem ser acessadas se o usuário estiver logado */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/acoes" element={<Actions />} />
-            <Route path="/gestao-de-tarefas" element={<TaskManagement />} />
-            <Route path="/mapa" element={<MapPage />} />
-            <Route path="/financeiro" element={<PrivateRoute><Financeiro /></PrivateRoute>} />
-            <Route path="/eleicoes" element={<Eleicoes />} />
-            <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/configuracoes" element={<Configuracoes />} />
-          </Route>
+        {/* Rota Pai Protegida */}
+        <Route 
+          path="/" 
+          element={
+            <PrivateRoute> {/* O PrivateRoute agora renderiza o DashboardLayout como 'children' */}
+              <DashboardLayout isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+            </PrivateRoute>
+          }
+        >
+          {/* Rotas Filhas (que aparecem dentro do DashboardLayout) */}
+          <Route index element={<Dashboard />} /> {/* Rota inicial */}
+          <Route path="acoes" element={<Actions />} />
+          <Route path="gestao-de-tarefas" element={<TaskManagement />} />
+          <Route path="mapa" element={<MapPage />} />
+          <Route path="financeiro" element={<Financeiro />} />
+          <Route path="eleicoes" element={<Eleicoes />} />
+          <Route path="cadastro" element={<Cadastro />} />
+          <Route path="configuracoes" element={<Configuracoes />} />
         </Route>
       </Routes>
     </Router>

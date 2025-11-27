@@ -1,26 +1,23 @@
-// backend/src/routes/api.js
-
 const express = require('express');
 const router = express.Router();
 
-// Importar todos os controladores e middlewares
 const authController = require('../controllers/authController');
 const eleicoesController = require('../controllers/eleicoesController');
 const tarefaController = require('../controllers/tarefaController');
 const dashboardController = require('../controllers/DashboardController');
 const contatoController = require('../controllers/contatoController');
 const acaoController = require('../controllers/acaoController');
+
+const userController = require('../controllers/userController');
+const financeiroController = require('../controllers/financeiroController');
+const municipioController = require('../controllers/municipioController');
+
 const { ensureAuthenticated, isAdmin } = require('../middlewares/authMiddleware');
 
-// --- ROTA DE AUTENTICAÇÃO (PÚBLICA) ---
-// Esta rota DEVE VIR ANTES do middleware de segurança.
 router.post('/login', authController.login);
 
-// --- APLICAÇÃO DO MIDDLEWARE DE SEGURANÇA ---
-// A partir daqui, todas as rotas abaixo exigirão um token válido.
 router.use(ensureAuthenticated);
 
-// --- ROTAS PROTEGIDAS ---
 router.get('/eleicoes', eleicoesController.getAllEleicoes);
 router.get('/eleicoes/stats', eleicoesController.getEleicaoStats);
 
@@ -35,11 +32,22 @@ router.get('/dashboard/stats', dashboardController.getDashboardStats);
 router.get('/contatos', contatoController.getAllContatos);
 router.post('/contatos', contatoController.createContato);
 router.put('/contatos/:id', contatoController.updateContato);
-router.delete('/contatos/:id', isAdmin, contatoController.deleteContato); // Exemplo de rota apenas para admin
+router.delete('/contatos/:id', isAdmin, contatoController.deleteContato);
 
 router.get('/acoes', acaoController.findAll);
 router.post('/acoes', acaoController.create);
 router.put('/acoes/:id', acaoController.update);
 router.delete('/acoes/:id', acaoController.delete);
+
+router.get('/financeiro', financeiroController.findAll);
+router.post('/financeiro', financeiroController.create);
+
+router.get('/municipios', municipioController.findAll);
+router.get('/municipios/:municipioId/bairros', municipioController.findBairrosByMunicipio);
+
+router.post('/users', isAdmin, userController.create);
+router.get('/users', isAdmin, userController.findAll);
+router.delete('/users/:id', isAdmin, userController.delete);
+router.post('/profile/change-password', userController.changePassword);
 
 module.exports = router;

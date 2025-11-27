@@ -1,44 +1,50 @@
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
-import 'leaflet.heat';
+import 'leaflet.heat'; 
 import L from 'leaflet';
 
 const HeatmapLayer = ({ points }) => {
   const map = useMap();
+  const heatLayerRef = useRef(null); 
 
   useEffect(() => {
-    if (!map || !points || points.length === 0) {
+    if (!points || points.length === 0) {
+      if (heatLayerRef.current && map.hasLayer(heatLayerRef.current)) {
+        map.removeLayer(heatLayerRef.current);
+      }
       return;
     }
 
-    const heatLayer = L.heatLayer(points, {
-      // --- MUDANÇAS APLICADAS ---
-
-      // 1. RAIO: Aumentado para 40 (ajuste como preferir)
-      radius: 40,
-      
-      // 2. MAX: Este é o ajuste crucial.
-      // Define a intensidade máxima. Nossos pontos valem '1'.
-      // Aqui, 10 pontos sobrepostos = intensidade máxima.
-      max: 10,
-
-      // 3. GRADIENTE: Trocado para HEX para garantir compatibilidade.
-      // O gradiente agora será visível.
+    const options = {
+      radius: 80,
+      blur: 60,
+      maxZoom: 18,
+      minOpacity: 0.2,
+      max: 0.5, 
       gradient: {
-        0.0: '#0000FF', // 0% (Baixa intensidade) -> Azul
-        0.4: '#00FFFF', // 40% -> Ciano
-        0.6: '#00FF00', // 60% -> Verde
-        0.8: '#FFFF00', // 80% -> Amarelo
-        1.0: '#FF0000'  // 100% (Alta intensidade) -> Vermelho
+        0.4: 'blue',
+        0.6: 'cyan',
+        0.7: 'lime',
+        0.8: 'yellow',
+        1.0: 'red'
       }
-    });
+    };
 
-    map.addLayer(heatLayer);
+    if (!heatLayerRef.current) {
+      heatLayerRef.current = L.heatLayer(points, options);
+      map.addLayer(heatLayerRef.current);
+    } else {
+      heatLayerRef.current.setLatLngs(points);
+      heatLayerRef.current.setOptions(options);
+    }
 
     return () => {
-      map.removeLayer(heatLayer);
+      if (map.hasLayer(heatLayerRef.current)) {
+        map.removeLayer(heatLayerRef.current);
+        heatLayerRef.current = null;
+      }
     };
-  }, [map, points]);
+  }, [map, points]); 
 
   return null;
 };

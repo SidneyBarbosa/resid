@@ -12,14 +12,14 @@ const Configuracoes = () => {
     
     const [activeTab, setActiveTab] = useState('senha');
 
-    return (
-        <div className="config-container">
-            <header className="page-header">
-                <div>
-                    <h1>Configurações</h1>
-                    <p>Gerencie suas configurações de usuário</p>
-                </div>
-            </header>
+  return (
+    <div className="config-container">
+      <header className="page-header">
+        <div>
+          <h1>Configurações</h1>
+          <p>Gerencie suas configurações de usuário</p>
+        </div>
+      </header>
 
             <div className="config-card">
                
@@ -53,8 +53,11 @@ const Configuracoes = () => {
                     {activeTab === 'admin' && <AdminUsuarios />}
                 </div>
             </div>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Configuracoes;

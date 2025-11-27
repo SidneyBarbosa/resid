@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
-import ContatoMap from './ContatoMap';
+import DataMap from './DataMap';
 import ContatoForm from './ContatoForm';
 import NovoContatoForm from './NovoContatoForm';
+import ConfirmModal from './ConfirmModal';
 import '../styles/Cadastro.css';
 import '../styles/NovoContatoForm.css';
 
@@ -11,18 +12,28 @@ const Cadastro = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    // Controla o modal de EDIÇÃO
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     const [contatoToEdit, setContatoToEdit] = useState(null);
 
-    const fetchContatos = useCallback(async () => {
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [contatoToDeleteId, setContatoToDeleteId] = useState(null);
+    
+    // Estado para o mapa de Ações
+    const [acoes, setAcoes] = useState([]);
+
+    const fetchData = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await api.get('/contatos');
-            setContatos(response.data);
+            const [contatosResponse, acoesResponse] = await Promise.all([
+                api.get('/contatos'),
+                api.get('/acoes')
+            ]);
+            
+            setContatos(contatosResponse.data);
+            setAcoes(acoesResponse.data); // Define as ações para o mapa
             setError(null);
         } catch (err) {
-            setError('Falha ao carregar contatos.');
+            setError('Falha ao carregar dados da página.');
             console.error(err);
         } finally {
             setLoading(false);
@@ -30,21 +41,24 @@ const Cadastro = () => {
     }, []);
 
     useEffect(() => {
-        fetchContatos();
-    }, [fetchContatos]);
+        fetchData();
+    }, [fetchData]);
 
     const handleSave = async (contatoData) => {
         try {
-            if (contatoToEdit) { // Editando um contato existente
+            if (contatoToEdit) {
                 await api.put(`/contatos/${contatoToEdit.id}`, contatoData);
-            } else { // Criando um novo contato
+            } else {
                 await api.post('/contatos', { ...contatoData, profile_id: 'b9988984-6aab-44b6-9d81-f86d95a4ceb3' });
             }
-            fetchContatos();
+            // Apenas recarrega os contatos, pois o mapa de ações não mudou
+            const contatosResponse = await api.get('/contatos');
+            setContatos(contatosResponse.data);
+
             setIsEditFormOpen(false);
             setContatoToEdit(null);
         } catch (err) {
-            alert('Falha ao salvar o contato. Verifique o console para mais detalhes.');
+            alert('Falha ao salvar o contato.');
             console.error(err);
         }
     };
@@ -54,24 +68,39 @@ const Cadastro = () => {
         setIsEditFormOpen(true);
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Tem certeza que deseja deletar este contato?')) {
+    const handleOpenConfirmModal = (id) => {
+        setContatoToDeleteId(id);
+        setIsConfirmModalOpen(true);
+    };
+
+    const handleCloseConfirmModal = () => {
+        setContatoToDeleteId(null);
+        setIsConfirmModalOpen(false);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (contatoToDeleteId) {
             try {
-                await api.delete(`/contatos/${id}`);
-                fetchContatos();
+                await api.delete(`/contatos/${contatoToDeleteId}`);
+                
+                // Apenas recarrega os contatos
+                const contatosResponse = await api.get('/contatos');
+                setContatos(contatosResponse.data);
+
+                handleCloseConfirmModal();
             } catch (err) {
                 alert('Falha ao deletar o contato.');
                 console.error(err);
+                handleCloseConfirmModal();
             }
         }
     };
 
-    if (loading) return <p>Carregando contatos...</p>;
+    if (loading) return <p>Carregando dados...</p>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
     return (
         <div className="cadastro-page">
-            {/* O modal de edição só abre quando o botão 'Editar' na tabela é clicado */}
             {isEditFormOpen && <ContatoForm onClose={() => setIsEditFormOpen(false)} onSave={handleSave} contatoToEdit={contatoToEdit} />}
             
             <div className="cadastro-header">
@@ -82,10 +111,14 @@ const Cadastro = () => {
             </div>
             
             <div className="map-container-cadastro">
-                <ContatoMap contatos={contatos} />
+                <DataMap 
+                    data={acoes} // Mostra o mapa de AÇÕES
+                    titleField="titulo"
+                    dateField="data"
+                    entityName="ações"
+                />
             </div>
 
-            {/* FORMULÁRIO FIXO PARA NOVO CADASTRO SENDO RENDERIZADO AQUI */}
             <NovoContatoForm onSave={handleSave} />
 
             <div className="table-container-cadastro">
@@ -109,7 +142,7 @@ const Cadastro = () => {
                                         <td>{contato.telefone || '-'}</td>
                                         <td>
                                             <button className="action-btn edit-btn" onClick={() => handleEdit(contato)}>Editar</button>
-                                            <button className="action-btn delete-btn" onClick={() => handleDelete(contato.id)}>Deletar</button>
+                                            <button className="action-btn delete-btn" onClick={() => handleOpenConfirmModal(contato.id)}>Deletar</button>
                                         </td>
                                     </tr>
                                 ))
@@ -122,6 +155,13 @@ const Cadastro = () => {
                     </table>
                 </div>
             </div>
+
+            <ConfirmModal
+                isOpen={isConfirmModalOpen}
+                message="Tem certeza que deseja deletar este contato?"
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCloseConfirmModal}
+            />
         </div>
     );
 };
