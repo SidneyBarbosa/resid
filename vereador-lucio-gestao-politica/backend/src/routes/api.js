@@ -7,7 +7,7 @@ const tarefaController = require('../controllers/tarefaController');
 const dashboardController = require('../controllers/DashboardController');
 const contatoController = require('../controllers/contatoController');
 const acaoController = require('../controllers/acaoController');
-
+const chatbotController = require('../controllers/chatbotController');
 const userController = require('../controllers/userController');
 const financeiroController = require('../controllers/financeiroController');
 const municipioController = require('../controllers/municipioController');
@@ -28,6 +28,7 @@ router.put('/tarefas/:id', tarefaController.updateTarefa);
 router.delete('/tarefas/:id', tarefaController.deleteTarefa);
 
 router.get('/dashboard/stats', dashboardController.getDashboardStats);
+router.get('/dashboard/summary', dashboardController.getReportSummary);
 
 router.get('/contatos', contatoController.getAllContatos);
 router.post('/contatos', contatoController.createContato);
@@ -49,5 +50,7 @@ router.post('/users', isAdmin, userController.create);
 router.get('/users', isAdmin, userController.findAll);
 router.delete('/users/:id', isAdmin, userController.delete);
 router.post('/profile/change-password', userController.changePassword);
+
+router.post('/chatbot', ensureAuthenticated, chatbotController.chat);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const db = require('../database/db');
 
 class DashboardModel {
+    
     static async getStats() {
         const [
             statusRes, responsavelRes, totalTarefasRes, totalUsuariosRes, acoesConcluidasRes,
@@ -60,6 +61,34 @@ class DashboardModel {
         };
 
         return stats;
+    }
+
+    static async getReportSummary() {
+        const query = `
+            SELECT
+                (SELECT COUNT(*) FROM "contatos" WHERE created_at >= CURRENT_DATE) AS contatos_diario,
+                (SELECT COUNT(*) FROM "tarefas" WHERE status = 'Concluído' AND updated_at >= CURRENT_DATE) AS tarefas_conc_diario,
+                (SELECT COUNT(*) FROM "tarefas" WHERE created_at >= CURRENT_DATE) AS tarefas_criadas_diario,
+                (SELECT COUNT(*) FROM "acoes" WHERE created_at >= CURRENT_DATE) AS acoes_diario,
+
+                (SELECT COUNT(*) FROM "contatos" WHERE created_at >= date_trunc('week', NOW())) AS contatos_semanal,
+                (SELECT COUNT(*) FROM "tarefas" WHERE status = 'Concluído' AND updated_at >= date_trunc('week', NOW())) AS tarefas_conc_semanal,
+                (SELECT COUNT(*) FROM "tarefas" WHERE created_at >= date_trunc('week', NOW())) AS tarefas_criadas_semanal,
+                (SELECT COUNT(*) FROM "acoes" WHERE created_at >= date_trunc('week', NOW())) AS acoes_semanal,
+
+                (SELECT COUNT(*) FROM "contatos" WHERE created_at >= date_trunc('month', NOW())) AS contatos_mensal,
+                (SELECT COUNT(*) FROM "tarefas" WHERE status = 'Concluído' AND updated_at >= date_trunc('month', NOW())) AS tarefas_conc_mensal,
+                (SELECT COUNT(*) FROM "tarefas" WHERE created_at >= date_trunc('month', NOW())) AS tarefas_criadas_mensal,
+                (SELECT COUNT(*) FROM "acoes" WHERE created_at >= date_trunc('month', NOW())) AS acoes_mensal,
+
+                (SELECT COUNT(*) FROM "contatos" WHERE created_at >= date_trunc('year', NOW())) AS contatos_anual,
+                (SELECT COUNT(*) FROM "tarefas" WHERE status = 'Concluído' AND updated_at >= date_trunc('year', NOW())) AS tarefas_conc_anual,
+                (SELECT COUNT(*) FROM "tarefas" WHERE created_at >= date_trunc('year', NOW())) AS tarefas_criadas_anual,
+                (SELECT COUNT(*) FROM "acoes" WHERE created_at >= date_trunc('year', NOW())) AS acoes_anual
+        `;
+        
+        const result = await db.query(query);
+        return result.rows[0];
     }
 }
 
