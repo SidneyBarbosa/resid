@@ -14,7 +14,7 @@ import {
 import '../styles/Dashboard.css';
 import DataMap from './DataMap';
 import api from '../services/api';
-import { BsChatDots, BsDownload, BsPeopleFill, BsCheckCircleFill, BsListTask, BsMegaphoneFill } from 'react-icons/bs'; 
+import { BsChatDots } from 'react-icons/bs'; 
 import Chatbot from '../components/Chatbot'; 
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement);
@@ -33,9 +33,6 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-  const [reportSummary, setReportSummary] = useState(null);
-  const [reportPeriod, setReportPeriod] = useState('Diário');
-
   const [tasksStatusChart, setTasksStatusChart] = useState({ datasets: [] });
   const [responsibleChart, setResponsibleChart] = useState({ datasets: [] });
   const [progressChart, setProgressChart] = useState({ datasets: [] });
@@ -52,16 +49,15 @@ function Dashboard() {
     try {
       setLoading(true);
       
-      const [statsResponse, acoesResponse, summaryResponse] = await Promise.all([
+      // Removemos a chamada do summary
+      const [statsResponse, acoesResponse] = await Promise.all([
         api.get('/dashboard/stats'),
-        api.get('/acoes'),
-        api.get('/dashboard/summary')
+        api.get('/acoes')
       ]);
       
       setDashboardData(statsResponse.data);
       setAcoes(acoesResponse.data);
-      setReportSummary(summaryResponse.data);
-
+      
       if (statsResponse.data.tasksByStatus) {
         const labels = statsResponse.data.tasksByStatus.map(item => item.status);
         const data = statsResponse.data.tasksByStatus.map(item => item.count);
@@ -129,17 +125,9 @@ function Dashboard() {
   const chartOptions = { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'top' } } };
   const doughnutOptions = { ...chartOptions, scales: {}, cutout: '70%' };
 
-  const handleGenerateReport = (periodo) => {
-    alert(`Gerando relatório PDF para: ${periodo}...`);
-  };
-
   if (loading) return <p style={{padding: '20px'}}>Carregando dashboard...</p>;
   if (error) return <p style={{ color: 'red', padding: '20px' }}>{error}</p>;
-  if (!dashboardData || !reportSummary) return <p style={{padding: '20px'}}>Não há dados para exibir.</p>;
-
-  const currentData = reportSummary[reportPeriod.toLowerCase().replace('á', 'a')] || { 
-    novosContatos: 0, tarefasConcluidas: 0, tarefasCriadas: 0, acoesCriadas: 0 
-  };
+  if (!dashboardData) return <p style={{padding: '20px'}}>Não há dados para exibir.</p>;
 
   return (
     <div className="dashboard-page">
@@ -201,66 +189,6 @@ function Dashboard() {
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <div className="section-container">
-        <h3 className="section-title">Resumo de Atividades</h3>
-        
-        <div className="report-time-selector">
-          {['Diário', 'Semanal', 'Mensal', 'Anual'].map((periodo) => (
-            <button 
-              key={periodo}
-              className={`time-btn ${reportPeriod === periodo ? 'active' : ''}`}
-              onClick={() => setReportPeriod(periodo)}
-            >
-              {periodo}
-            </button>
-          ))}
-        </div>
-
-        <div className="dynamic-summary-card">
-          <div className="summary-header">
-            <h3>Resumo {reportPeriod}</h3>
-            <button className="generate-report-btn" onClick={() => handleGenerateReport(reportPeriod)}>
-              <BsDownload size={18} />
-              Gerar Relatório
-            </button>
-          </div>
-          
-          <div className="summary-grid">
-            <div className="summary-item">
-                <div className="icon-badge blue"><BsPeopleFill /></div>
-                <div>
-                    <span>Novos Contatos</span>
-                    <strong>{currentData.novosContatos}</strong>
-                </div>
-            </div>
-
-            <div className="summary-item">
-                <div className="icon-badge green"><BsCheckCircleFill /></div>
-                <div>
-                    <span>Tarefas Concluídas</span>
-                    <strong>{currentData.tarefasConcluidas}</strong>
-                </div>
-            </div>
-
-            <div className="summary-item">
-                <div className="icon-badge purple"><BsListTask /></div>
-                <div>
-                    <span>Tarefas Criadas</span>
-                    <strong>{currentData.tarefasCriadas}</strong>
-                </div>
-            </div>
-
-            <div className="summary-item">
-                <div className="icon-badge orange"><BsMegaphoneFill /></div>
-                <div>
-                    <span>Novas Ações</span>
-                    <strong>{currentData.acoesCriadas}</strong>
-                </div>
-            </div>
-          </div>
         </div>
       </div>
 

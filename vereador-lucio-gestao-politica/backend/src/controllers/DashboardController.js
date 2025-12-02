@@ -1,5 +1,6 @@
 const DashboardModel = require('../models/dashboardModel'); 
 
+// 1. Estatísticas Gerais (Gráficos, Mapa, Tabela de Bairros)
 exports.getDashboardStats = async (req, res) => {
     try {
         const stats = await DashboardModel.getStats();
@@ -10,12 +11,15 @@ exports.getDashboardStats = async (req, res) => {
     }
 };
 
+// 2. Resumo de Atividades (Card Dinâmico: Diário, Semanal, Mensal, Anual)
 exports.getReportSummary = async (req, res) => {
     try {
         const raw = await DashboardModel.getReportSummary();
         
+        // Função auxiliar para garantir que o valor seja um número inteiro
         const n = (val) => parseInt(val, 10) || 0;
 
+        // Formata os dados exatamente como o Frontend espera receber
         const formattedData = {
             diario: {
                 novosContatos: n(raw.contatos_diario),
