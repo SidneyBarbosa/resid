@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/resid/static/css/main.7e72f60c.css",
-    "main.js": "/resid/static/js/main.e3d97f90.js",
+    "main.js": "/resid/static/js/main.762e081d.js",
     "static/media/sergipe-conexao123.jpg": "/resid/static/media/sergipe-conexao123.e88892f8d9c7afb23618.jpg",
     "static/media/bootstrap-icons.woff?": "/resid/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
     "static/media/bootstrap-icons.woff2?": "/resid/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
     "index.html": "/resid/index.html",
     "main.7e72f60c.css.map": "/resid/static/css/main.7e72f60c.css.map",
-    "main.e3d97f90.js.map": "/resid/static/js/main.e3d97f90.js.map"
+    "main.762e081d.js.map": "/resid/static/js/main.762e081d.js.map"
   },
   "entrypoints": [
     "static/css/main.7e72f60c.css",
-    "static/js/main.e3d97f90.js"
+    "static/js/main.762e081d.js"
   ]
 }
