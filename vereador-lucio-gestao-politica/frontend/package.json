@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "homepage": "https://SidneyBarbosa.github.io/resid", 
   "version": "0.1.0",
   "proxy": "http://localhost:5000",
   "private": true,
@@ -8,6 +9,7 @@
     "axios": "^1.12.2",
     "bootstrap-icons": "^1.13.1",
     "chart.js": "^4.5.0",
+    "gh-pages": "^6.1.1", 
     "leaflet": "^1.9.4",
     "leaflet.heat": "^0.2.0",
     "react": "^19.0.0",
@@ -23,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
