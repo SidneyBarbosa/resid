@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import 'leaflet.heat'; 
 import L from 'leaflet';
