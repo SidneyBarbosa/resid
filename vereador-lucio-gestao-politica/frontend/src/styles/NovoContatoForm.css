@@ -100,12 +100,12 @@
 
 /* Botão Limpar (Secundário) */
 .secondary-button {
-    background-color: #eb4c20;
+    background-color: #f51b07;
     color: #ffffff;
 }
 
 .secondary-button:hover {
-    background-color: #ea0f0c;
+    background-color: #c40d0a;
 }
 
 /* Botão desabilitado (Imprimir) */

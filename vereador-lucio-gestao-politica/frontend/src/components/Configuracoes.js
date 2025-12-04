@@ -53,10 +53,7 @@ const Configuracoes = () => {
                     {activeTab === 'admin' && <AdminUsuarios />}
                 </div>
             </div>
-          )}
         </div>
-      </div>
-    </div>
   );
 };
 

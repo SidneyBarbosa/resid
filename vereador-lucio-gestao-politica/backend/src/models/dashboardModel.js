@@ -1,6 +1,8 @@
 const db = require('../database/db');
 
 class DashboardModel {
+    
+    // --- (MANTENHA O GETSTATS IGUAL, NÃO MEXI NELE) ---
     static async getStats() {
         const [
             statusRes, responsavelRes, totalTarefasRes, totalUsuariosRes, acoesConcluidasRes,
@@ -60,6 +62,69 @@ class DashboardModel {
         };
 
         return stats;
+    }
+
+    // --- CORREÇÃO DEFINITIVA DE DATA ---
+    // Usamos AT TIME ZONE 'America/Sao_Paulo' para garantir que "Hoje" seja "Hoje no Brasil"
+    static async getReportSummary() {
+        const query = `
+            SELECT
+                -- === DIÁRIO (Hoje) ===
+                -- Compara a data de criação (convertida para BR) com a data de agora (convertida para BR)
+                (SELECT COUNT(*) FROM "contatos" 
+                 WHERE (created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date = (NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date) AS contatos_diario,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE status = 'Concluído' AND (updated_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date = (NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date) AS tarefas_conc_diario,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE (created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date = (NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date) AS tarefas_criadas_diario,
+                
+                (SELECT COUNT(*) FROM "acoes" 
+                 WHERE (created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date = (NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')::date) AS acoes_diario,
+
+                -- === SEMANAL (Início da semana BR até agora) ===
+                (SELECT COUNT(*) FROM "contatos" 
+                 WHERE created_at >= date_trunc('week', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS contatos_semanal,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE status = 'Concluído' AND updated_at >= date_trunc('week', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS tarefas_conc_semanal,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE created_at >= date_trunc('week', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS tarefas_criadas_semanal,
+                
+                (SELECT COUNT(*) FROM "acoes" 
+                 WHERE created_at >= date_trunc('week', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS acoes_semanal,
+
+                -- === MENSAL ===
+                (SELECT COUNT(*) FROM "contatos" 
+                 WHERE created_at >= date_trunc('month', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS contatos_mensal,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE status = 'Concluído' AND updated_at >= date_trunc('month', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS tarefas_conc_mensal,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE created_at >= date_trunc('month', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS tarefas_criadas_mensal,
+                
+                (SELECT COUNT(*) FROM "acoes" 
+                 WHERE created_at >= date_trunc('month', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS acoes_mensal,
+
+                -- === ANUAL ===
+                (SELECT COUNT(*) FROM "contatos" 
+                 WHERE created_at >= date_trunc('year', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS contatos_anual,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE status = 'Concluído' AND updated_at >= date_trunc('year', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS tarefas_conc_anual,
+                
+                (SELECT COUNT(*) FROM "tarefas" 
+                 WHERE created_at >= date_trunc('year', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS tarefas_criadas_anual,
+                
+                (SELECT COUNT(*) FROM "acoes" 
+                 WHERE created_at >= date_trunc('year', NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')) AS acoes_anual
+        `;
+        
+        const result = await db.query(query);
+        return result.rows[0];
     }
 }
 

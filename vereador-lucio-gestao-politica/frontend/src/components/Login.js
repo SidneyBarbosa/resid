@@ -53,7 +53,7 @@ function Login({ onLogin }) {
                 style={{ backgroundImage: `url(${backgroundImage})` }}
             >
                 <div className="login-visual-overlay">
-                    <h1>Plataforma de Gestão</h1>
+                    <h1>Plataforma de Gestão Mandattum</h1>
                     <p>Gerenciador de Tarefas Inteligente</p>
                 </div>
             </div>
