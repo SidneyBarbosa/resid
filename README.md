@@ -28,34 +28,56 @@ Certifique-se de que você tem instalado em sua máquina:
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/SidneyBarbosa/resid.git](https://github.com/SidneyBarbosa/resid.git)
-    cd resid
+    git clone https://github.com/SidneyBarbosa/resid.git
     ```
 
-2.  **Instale as dependências:**
-    **(Substitua o comando abaixo pelo comando de instalação do seu projeto. Ex: `npm install`, `pip install -r requirements.txt`, etc.)**
-    ```bash
-    # Exemplo:
-    npm install
-    ```
+2.  **Configuração de Variáveis de Ambiente:**
+    Crie um arquivo `.env` na pasta "backend" e adicione as seguintes informações:
+    ```.env
+    # Configuração do Banco de Dados 
+    DB_USER=postgres
+    DB_HOST=localhost
+    DB_DATABASE=postgres
+    DB_PASSWORD=root
+    DB_PORT=5432
 
-3.  **Configuração de Variáveis de Ambiente:**
-    Crie um arquivo `.env` na raiz do projeto e adicione as variáveis necessárias.
-    **(Liste aqui as variáveis de ambiente necessárias, se houver.)**
+    # Segredo da Aplicação
+    JWT_SECRET=
     ```
-    # Exemplo de conteúdo do arquivo .env
-    DATABASE_URL=...
-    API_KEY=...
+    
+3.  **Vá até o diretório:**
+    **Após abrir a pasta em uma IDE, abra um terminal powershell, para acessar as pastas Frontend e Backend, e rode os comandos (uma linha por vez):**
+    Abre a pasta principal:
+    ```powershell
+    cd vereador-lucio-gestao-politica 
     ```
+    Abre a pasta beckend:
+    ```powershell
+    cd vereador-lucio-gestao-politica/beckend
+    ```
+    Em outro terminal, abra a pasta frontend:
+    ```powershell
+    cd vereador-lucio-gestao-politica/frontend
+    ```
+    
+4.  **Instale as dependências e inicie o projeto:**
+    **No terminal na pasta Backend, execute os comandos:**
+    ```powershell
+    cd vereador-lucio-gestao-politica/beckend npm install
+    cd vereador-lucio-gestao-politica/beckend npm start
+    ```
+    Seu backend está pronto!
 
-4.  **Inicie o projeto:**
-    **(Substitua o comando de execução pelo comando correto para o seu projeto.)**
-    ```bash
-    # Exemplo:
-    npm start
-    # ou
-    python manage.py runserver
+    **No terminal na pasta Frontend, execute os comandos:**
+    ```powershell
+    cd vereador-lucio-gestao-politica/frontend npm install
+    cd vereador-lucio-gestao-politica/frontend npm start
     ```
+    Seu frontend está pronto! Ele deve abrir automaticamente no seu navegador (localhost).
+
+5.  **Faça login:**
+    Email: admin@teste.com
+    Senha: Eduardo123
 
 ## 💡 Uso
 
@@ -64,3 +86,5 @@ Certifique-se de que você tem instalado em sua máquina:
 ## 📂 Estrutura do Repositório
 
 O projeto segue a seguinte estrutura de diretórios:
+
+resid
