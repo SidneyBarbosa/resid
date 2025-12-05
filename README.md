@@ -81,7 +81,7 @@ Certifique-se de que você tem instalado em sua máquina:
 
 5.  **Faça login:**
    * Email: admin@teste.com
-   * Senha: Eduardo123
+   * Senha: Eduardo2025
 
 ## 📂 Estrutura do Repositório
 
