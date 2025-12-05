@@ -64,6 +64,8 @@ Certifique-se de que você tem instalado em sua máquina:
     * **No terminal na pasta Backend, execute os comandos:**
     ```powershell
     cd vereador-lucio-gestao-politica/beckend npm install
+    ```
+    ```powershell
     cd vereador-lucio-gestao-politica/beckend npm start
     ```
     Seu backend está pronto!
@@ -71,6 +73,8 @@ Certifique-se de que você tem instalado em sua máquina:
     **No terminal na pasta Frontend, execute os comandos:**
     ```powershell
     cd vereador-lucio-gestao-politica/frontend npm install
+    ```
+    ```powershell
     cd vereador-lucio-gestao-politica/frontend npm start
     ```
     Seu frontend está pronto! Ele deve abrir automaticamente no seu navegador (localhost).
@@ -79,13 +83,9 @@ Certifique-se de que você tem instalado em sua máquina:
    * Email: admin@teste.com
    * Senha: Eduardo123
 
-## 💡 Uso
-
-**(Explique como utilizar a aplicação ou biblioteca. Inclua exemplos de código, se for o caso.)**
-
 ## 📂 Estrutura do Repositório
 
-* O projeto segue a seguinte estrutura de diretórios:
+O projeto segue a seguinte estrutura de diretórios:
 
 * vereador-lucio-gestao-politica/
 * ├── backend/
