@@ -2,18 +2,16 @@
 
 ## Sobre o Projeto
 
-Este é o repositório para o projeto **resid**.
-
-**(Substitua este parágrafo pela descrição detalhada do seu projeto. O que ele faz? Qual problema ele resolve? Exemplo: "Este projeto visa gerenciar informações de resíduos sólidos urbanos" ou "Esta é uma aplicação web para o gerenciamento de informações residenciais.")**
+Este é o repositório para o projeto **Mandattum - Residência III**. 
 
 ## 🛠️ Tecnologias Utilizadas
 
 A lista a seguir são as principais tecnologias e frameworks utilizados neste projeto:
 
-* **Linguagem:** [Ex: Python, JavaScript, Java, C#]
-* **Framework:** [Ex: React, Django, Spring Boot, Node.js/Express]
-* **Banco de Dados:** [Ex: PostgreSQL, MongoDB, SQLite]
-* **Outras Ferramentas:** [Ex: Docker, GitHub Actions, Tailwind CSS]
+* **Linguagem:** JavaScript
+* **Framework:** React, Node.js, Express e Typescript 
+* **Banco de Dados:** PostgreSQL
+* **Outras Ferramentas:** GitHub Pages
 
 ## 🚀 Como Executar o Projeto
 
@@ -23,9 +21,8 @@ Siga os passos abaixo para ter uma cópia local do projeto em execução.
 
 Certifique-se de que você tem instalado em sua máquina:
 
-* [Ex: Node.js e npm]
-* [Ex: Python e pip]
-* [Ex: Git]
+* Node.js e npm
+* Express.JS
 
 ### Instalação
 
